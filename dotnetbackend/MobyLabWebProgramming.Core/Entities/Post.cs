@@ -7,10 +7,7 @@ namespace MobyLabWebProgramming.Core.Entities;
 /// </summary>
 public class Post : BaseEntity
 {
-    // add properties here
-    // idUser, content
-
-    public int IdUserCreator { get; set; }
+    public User? UserCreator { get; set; }
 
     public string Content { get; set; } = default!;
 }

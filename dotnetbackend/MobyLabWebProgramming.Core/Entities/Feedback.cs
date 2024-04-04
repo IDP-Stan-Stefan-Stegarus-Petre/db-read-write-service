@@ -21,6 +21,8 @@ public class FeedBack : BaseEntity
 
     public string TypeOfAppreciation { get; set; } = default!; // good, bad, very good, very bad, etc.. for select
 
-    public bool IsAnonymous { get; set; } = false; // for radio button
+    public bool IsUserExperienceEnjoyable { get; set; } = false; // for radio button
+
+    public User? User { get; set; } // one to one relationship with user
 
 }
