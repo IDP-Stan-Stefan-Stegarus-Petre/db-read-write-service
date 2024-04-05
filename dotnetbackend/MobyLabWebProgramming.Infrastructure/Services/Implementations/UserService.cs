@@ -96,7 +96,8 @@ public class UserService : IUserService
             Email = user.Email,
             Name = user.Name,
             Role = user.Role,
-            Password = user.Password
+            Password = user.Password,
+            PhoneNumber = user.PhoneNumber
         }, cancellationToken); // A new entity is created and persisted in the database.
 
         await _mailService.SendMail(user.Email, "Welcome!", MailTemplates.UserAddTemplate(user.Name), true, "My App", cancellationToken); // You can send a notification on the user email. Change the email if you want.
@@ -117,6 +118,7 @@ public class UserService : IUserService
         {
             entity.Name = user.Name ?? entity.Name;
             entity.Password = user.Password ?? entity.Password;
+            entity.PhoneNumber = user.PhoneNumber ?? entity.PhoneNumber;
 
             await _repository.UpdateAsync(entity, cancellationToken); // Update the entity and persist the changes.
         }
