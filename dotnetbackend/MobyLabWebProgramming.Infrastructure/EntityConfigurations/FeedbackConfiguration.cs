@@ -39,7 +39,8 @@ public class FeedbackConfiguration : IEntityTypeConfiguration<FeedBack>
         //one to one relation with User
         builder.HasOne(e => e.User)
             .WithOne()
-            .HasForeignKey<FeedBack>(e => e.Id)
+            .HasForeignKey<FeedBack>(e => e.UserId)
+            .HasPrincipalKey<User>(e => e.Id)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
         builder.Property(e => e.CreatedAt)

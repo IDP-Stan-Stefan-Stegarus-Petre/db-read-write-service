@@ -18,7 +18,8 @@ public class EventConfiguration : IEntityTypeConfiguration<Event>
         builder.HasKey(x => x.Id); // Here it is specifies that the property Id is the primary key.
         builder.HasOne(e => e.User)
             .WithMany()
-            .HasForeignKey(e => e.Id)
+            .HasForeignKey(e => e.UserCreatorId)
+            .HasPrincipalKey(e => e.Id)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
         builder.Property(e => e.Content)

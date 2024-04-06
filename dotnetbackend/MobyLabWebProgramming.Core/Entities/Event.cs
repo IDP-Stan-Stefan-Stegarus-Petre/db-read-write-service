@@ -7,6 +7,7 @@ namespace MobyLabWebProgramming.Core.Entities;
 /// </summary>
 public class Event : BaseEntity
 {
+    public Guid UserCreatorId { get; set; }
     public User? User { get; set; }
 
     public string Content { get; set; } = default!;

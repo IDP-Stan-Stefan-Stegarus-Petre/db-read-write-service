@@ -18,12 +18,14 @@ public class CommentConfiguration : IEntityTypeConfiguration<Comment>
         builder.HasKey(x => x.Id); // Here it is specifies that the property Id is the primary key.
         builder.HasOne(e => e.User)
             .WithMany()
-            .HasForeignKey(e => e.Id)
+            .HasForeignKey(e => e.UserId)
+            .HasPrincipalKey(e => e.Id)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
         builder.HasOne(e => e.Post)
             .WithMany()
-            .HasForeignKey(e => e.Id)
+            .HasForeignKey(e => e.PostId)
+            .HasPrincipalKey(e => e.Id)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
         builder.Property(e => e.Content)

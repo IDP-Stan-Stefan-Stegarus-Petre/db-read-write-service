@@ -7,6 +7,7 @@ namespace MobyLabWebProgramming.Core.Entities;
 /// </summary>
 public class Post : BaseEntity
 {
+    public Guid UserCreatorId { get; set; }
     public User? UserCreator { get; set; }
 
     public string Content { get; set; } = default!;

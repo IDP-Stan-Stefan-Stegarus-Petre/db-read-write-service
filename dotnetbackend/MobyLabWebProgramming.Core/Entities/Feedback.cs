@@ -23,6 +23,7 @@ public class FeedBack : BaseEntity
 
     public bool IsUserExperienceEnjoyable { get; set; } = false; // for radio button
 
+    public Guid UserId { get; set; } // foreign key
     public User? User { get; set; } // one to one relationship with user
 
 }

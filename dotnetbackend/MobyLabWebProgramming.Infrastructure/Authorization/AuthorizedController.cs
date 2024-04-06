@@ -12,9 +12,21 @@ namespace MobyLabWebProgramming.Infrastructure.Authorization;
 public abstract class AuthorizedController : ControllerBase
 {
     private UserClaims? _userClaims;
+    private IPostService postService;
     protected readonly IUserService UserService;
 
-    protected AuthorizedController(IUserService userService) => UserService = userService;
+    protected readonly IPostService PostService;
+
+    protected AuthorizedController(IUserService userService)
+    {
+        UserService = userService;
+    }
+
+    protected AuthorizedController(IUserService userService, IPostService postService)
+    {
+        UserService = userService;
+        PostService = postService;
+    }
 
     /// <summary>
     /// This method extracts the claims from the JWT into an object.
