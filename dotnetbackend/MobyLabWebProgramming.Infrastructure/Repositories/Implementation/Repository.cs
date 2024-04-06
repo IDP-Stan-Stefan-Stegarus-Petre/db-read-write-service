@@ -35,6 +35,7 @@ public sealed class Repository<TDb> : IRepository<TDb> where TDb : DbContext
     public async Task<List<TOut>> ListAsync<T, TOut>(ISpecification<T, TOut> spec, CancellationToken cancellationToken = default) where T : BaseEntity =>
         await new SpecificationEvaluator().GetQuery(DbContext.Set<T>().AsQueryable(), spec).ToListAsync(cancellationToken);
 
+
     public async Task<T> AddAsync<T>(T entity, CancellationToken cancellationToken = default) where T : BaseEntity
     {
         await DbContext.Set<T>().AddAsync(entity, cancellationToken);
@@ -142,4 +143,7 @@ public sealed class Repository<TDb> : IRepository<TDb> where TDb : DbContext
                 .Skip((int)((pagination.Page - 1) * pagination.PageSize))
                 .Take((int)pagination.PageSize)
                 .ToListAsync(cancellationToken));
+
+    public async Task<List<T>> GetAllAsync<T>(CancellationToken cancellationToken = default) where T : BaseEntity =>
+         await DbContext.Set<T>().ToListAsync();
 }

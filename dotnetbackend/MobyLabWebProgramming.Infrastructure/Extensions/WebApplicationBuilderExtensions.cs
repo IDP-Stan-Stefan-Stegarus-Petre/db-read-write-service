@@ -171,6 +171,7 @@ public static class WebApplicationBuilderExtensions
         builder.Services
             .AddTransient<IUserService, UserService>()
             .AddTransient<IPostService, PostService>()
+            .AddTransient<ILikeService, LikeService>()
             .AddTransient<ILoginService, LoginService>()
             .AddTransient<IFileRepository, FileRepository>()
             .AddTransient<IUserFileService, UserFileService>()

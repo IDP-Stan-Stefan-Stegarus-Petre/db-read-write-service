@@ -104,4 +104,6 @@ public interface IRepository<out TDb> where TDb : DbContext
     /// Deletes entities that satisfy the specifications.
     /// </summary>
     public Task<int> DeleteAsync<T>(ISpecification<T> spec, CancellationToken cancellationToken = default) where T : BaseEntity;
+
+    Task<List<T>> GetAllAsync<T>(CancellationToken cancellationToken = default) where T : BaseEntity;
 }
