@@ -29,8 +29,6 @@ public class EventService : IEventService
     {
         var result = await _repository.GetAsync(new EventProjectionSpec(id), cancellationToken); // Get a Post using a specification on the repository.
 
-        Console.WriteLine(result);
-
         return result != null ? 
             ServiceResponse<EventDTO>.ForSuccess(result) : 
             ServiceResponse<EventDTO>.FromError(CommonErrors.EventNotFound); // Pack the result or error into a ServiceResponse.

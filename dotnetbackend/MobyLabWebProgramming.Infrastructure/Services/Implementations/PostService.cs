@@ -31,8 +31,6 @@ public class PostService : IPostService
     {
         var result = await _repository.GetAsync(new PostProjectionSpec(id), cancellationToken); // Get a Post using a specification on the repository.
 
-        Console.WriteLine(result);
-
         return result != null ? 
             ServiceResponse<PostDTO>.ForSuccess(result) : 
             ServiceResponse<PostDTO>.FromError(CommonErrors.PostNotFound); // Pack the result or error into a ServiceResponse.
@@ -41,8 +39,6 @@ public class PostService : IPostService
     public async Task<ServiceResponse<PagedResponse<PostDTO>>> GetPosts(PaginationSearchQueryParams pagination, CancellationToken cancellationToken = default)
     {
         var result = await _repository.PageAsync(pagination, new PostProjectionSpec(pagination.Search), cancellationToken); // Use the specification and pagination API to get only some entities from the database.
-
-        Console.WriteLine(result);  
 
         return ServiceResponse<PagedResponse<PostDTO>>.ForSuccess(result);
     }

@@ -33,8 +33,6 @@ public class LikeService : ILikeService
     {
         var result = await _repository.GetAsync(new LikeProjectionSpec(id), cancellationToken); // Get a Post using a specification on the repository.
 
-        Console.WriteLine(result);
-
         return result != null ?
             ServiceResponse<LikeDTO>.ForSuccess(result) :
             ServiceResponse<LikeDTO>.FromError(CommonErrors.LikeNotFound); // Pack the result or error into a ServiceResponse.
