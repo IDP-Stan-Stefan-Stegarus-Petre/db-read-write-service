@@ -7,8 +7,6 @@ namespace MobyLabWebProgramming.Core.Entities;
 /// </summary>
 public class FeedBack : BaseEntity
 {
-    // create fields for feedback entity
-
     public string Content { get; set; } = default!; //text
 
     public int Rating { get; set; } // can be used for checkbox button
