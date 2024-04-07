@@ -128,20 +128,16 @@ public class CommentService : ICommentService
             return ServiceResponse.FromError(CommonErrors.CommentNotAdded); // Return an error if the Like is not found.
         }
 
-        if (comment.UserId != comment.UserId)
+        if (comment.UserId != comentariu.UserId)
         {
             return ServiceResponse.FromError(CommonErrors.CommentNotModified); // Return an error if the User is not found.
         }
 
+        comentariu.Content = comment.Content!;
+
         try
         {
-            await _repository.UpdateAsync(new Comment
-            {
-                Id = comment.Id,
-                UserId = comment.UserId,
-                PostId = comment.PostId,
-                Content = comment.Content!
-            }, cancellationToken); // Update the entity.
+            await _repository.UpdateAsync(comentariu, cancellationToken); // Update the entity.
         } catch (Exception e)
         {
             return ServiceResponse.FromError(new(HttpStatusCode.BadRequest, e.Message, ErrorCodes.CannotUpdate));
