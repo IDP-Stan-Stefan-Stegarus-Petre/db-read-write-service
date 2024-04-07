@@ -19,4 +19,7 @@ public static class CommonErrors
     public static ErrorMessage CommentNotFound => new(HttpStatusCode.NotFound, "Comment doesn't exist!", ErrorCodes.EntityNotFound);
     public static ErrorMessage CommentNotAdded => new(HttpStatusCode.BadRequest, "Comment not added!", ErrorCodes.EntityNotFound);
     public static ErrorMessage CommentNotModified => new(HttpStatusCode.BadRequest, "Comment not allowed to be modified!", ErrorCodes.CannotUpdate);
+    public static ErrorMessage EventNotFound => new(HttpStatusCode.NotFound, "Event doesn't exist!", ErrorCodes.EntityNotFound);
+     public static ErrorMessage EventNotModified => new(HttpStatusCode.BadRequest, "Event not allowed to be modified!", ErrorCodes.CannotUpdate);
+
 }

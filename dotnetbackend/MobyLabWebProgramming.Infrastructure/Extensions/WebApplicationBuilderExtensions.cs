@@ -173,6 +173,7 @@ public static class WebApplicationBuilderExtensions
             .AddTransient<IPostService, PostService>()
             .AddTransient<ILikeService, LikeService>()
             .AddTransient<ICommentService, CommentService>()
+            .AddTransient<IEventService, EventService>()
             .AddTransient<ILoginService, LoginService>()
             .AddTransient<IFileRepository, FileRepository>()
             .AddTransient<IUserFileService, UserFileService>()
