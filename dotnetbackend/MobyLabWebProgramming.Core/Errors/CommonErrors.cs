@@ -16,4 +16,7 @@ public static class CommonErrors
     public static ErrorMessage LikeAlreadyExists => new(HttpStatusCode.BadRequest, "Like already exists!", ErrorCodes.CannotAdd);
     public static ErrorMessage FileNotFound => new(HttpStatusCode.NotFound, "File not found on disk!", ErrorCodes.PhysicalFileNotFound);
     public static ErrorMessage TechnicalSupport => new(HttpStatusCode.InternalServerError, "An unknown error occurred, contact the technical support!", ErrorCodes.TechnicalError);
+    public static ErrorMessage CommentNotFound => new(HttpStatusCode.NotFound, "Comment doesn't exist!", ErrorCodes.EntityNotFound);
+    public static ErrorMessage CommentNotAdded => new(HttpStatusCode.BadRequest, "Comment not added!", ErrorCodes.EntityNotFound);
+    public static ErrorMessage CommentNotModified => new(HttpStatusCode.BadRequest, "Comment not allowed to be modified!", ErrorCodes.CannotUpdate);
 }
