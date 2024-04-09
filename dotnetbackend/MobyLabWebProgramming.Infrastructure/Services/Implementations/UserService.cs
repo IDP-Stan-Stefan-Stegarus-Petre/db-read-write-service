@@ -64,6 +64,7 @@ public class UserService : IUserService
             Id = result.Id,
             Email = result.Email,
             Name = result.Name,
+            PhoneNumber = result.PhoneNumber,
             Role = result.Role
         };
 
@@ -72,6 +73,15 @@ public class UserService : IUserService
             User = user,
             Token = _loginService.GetToken(user, DateTime.UtcNow, new(7, 0, 0, 0)) // Get a JWT for the user issued now and that expires in 7 days.
         });
+    }
+
+    public async Task<ServiceResponse<User>> GetUserByEmail(string email, CancellationToken cancellationToken = default)
+    {
+        var result = await _repository.GetAsync(new UserSpec(email), cancellationToken);
+
+        return result != null ? 
+            ServiceResponse<User>.ForSuccess(result) : 
+            ServiceResponse<User>.FromError(CommonErrors.UserNotFound); // Pack the result or error into a ServiceResponse.
     }
 
     public async Task<ServiceResponse<int>> GetUserCount(CancellationToken cancellationToken = default) => 

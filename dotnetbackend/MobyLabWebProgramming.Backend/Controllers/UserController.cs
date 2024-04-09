@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MobyLabWebProgramming.Core.DataTransferObjects;
+using MobyLabWebProgramming.Core.Entities;
 using MobyLabWebProgramming.Core.Requests;
 using MobyLabWebProgramming.Core.Responses;
 using MobyLabWebProgramming.Infrastructure.Authorization;
@@ -35,6 +36,16 @@ public class UserController : AuthorizedController // Here we use the Authorized
         return currentUser.Result != null ? 
             this.FromServiceResponse(await UserService.GetUser(id)) : 
             this.ErrorMessageResult<UserDTO>(currentUser.Error);
+    }
+
+    /// <summary>
+    /// This method implements the Read operation (R from CRUD) on a user. 
+    /// </summary>
+    /// Unauthorized users can access this route for login purposes
+    [HttpGet("mail/{email}")] // This attribute will make the controller respond to a HTTP GET request on the route /api/User/GetById/<some_guid>.
+    public async Task<ActionResult<RequestResponse<User>>> GetByEmail([FromRoute] String email) // The FromRoute attribute will bind the id from the route to this parameter.
+    {
+        return this.FromServiceResponse(await UserService.GetUserByEmail(email));
     }
 
     /// <summary>

@@ -1,4 +1,5 @@
 ﻿using MobyLabWebProgramming.Core.DataTransferObjects;
+using MobyLabWebProgramming.Core.Entities;
 using MobyLabWebProgramming.Core.Requests;
 using MobyLabWebProgramming.Core.Responses;
 
@@ -14,6 +15,8 @@ public interface IUserService
     /// GetUser will provide the information about a user given its user Id.
     /// </summary>
     public Task<ServiceResponse<UserDTO>> GetUser(Guid id, CancellationToken cancellationToken = default);
+
+    Task<ServiceResponse<User>> GetUserByEmail(string email, CancellationToken cancellationToken = default);
     /// <summary>
     /// GetUsers returns page with user information from the database.
     /// </summary>
