@@ -8,5 +8,5 @@ public class Event : BaseEntity
     public string Date { get; set; } = default!;
 
     public Guid UserCreatorId { get; set; }
-    public User? UserCreator { get; set; }
+    public User UserCreator { get; set; } = default!;
 }

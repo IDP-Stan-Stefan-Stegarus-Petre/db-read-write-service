@@ -6,34 +6,77 @@ using MobyLabWebProgramming.Core.Entities;
 
 namespace MobyLabWebProgramming.Core.Specifications;
 
-/// <summary>
-/// This is a specification to filter the Post entities and map it to and PostDTO object via the constructors.
-/// Note how the constructors call the base class's constructors. Also, this is a sealed class, meaning it cannot be further derived.
-/// </summary>
 public sealed class PostProjectionSpec : BaseSpec<PostProjectionSpec, Post, PostDTO>
 {
-    /// <summary>
-    /// This is the projection/mapping expression to be used by the base class to get PostDTO object from the database.
-    /// </summary>
     protected override Expression<Func<Post, PostDTO>> Spec => e => new()
     {
         Id = e.Id,
-        UserCreatorId = e.UserCreatorId,
-        Content = e.Content
+        Content = e.Content,
+        User = new UserDTO
+        {
+            Id = e.UserCreator.Id,
+            Name = e.UserCreator.Name,
+            Email = e.UserCreator.Email,
+            PhoneNumber = e.UserCreator.PhoneNumber,
+            Role = e.UserCreator.Role
+        },
+        Comments = e.Comments.Select(c => new CommentDTO
+        {
+            Id = c.Id,
+            Content = c.Content,
+            User = new UserDTO
+            {
+                Id = c.User.Id,
+                Name = c.User.Name,
+                Email = c.User.Email,
+                PhoneNumber = c.User.PhoneNumber,
+                Role = c.User.Role
+            }
+        }).ToList(),
+        Likes = e.Likes.Select(l => new LikeDTO
+        {
+            Id = l.Id,
+            User = new UserDTO
+            {
+                Id = l.User.Id,
+                Name = l.User.Name,
+                Email = l.User.Email,
+                PhoneNumber = l.User.PhoneNumber,
+                Role = l.User.Role
+            }
+        }).ToList()
     };
 
     public PostProjectionSpec(bool orderByCreatedAt = true) : base(orderByCreatedAt)
     {
+        Query
+            .Include(e => e.UserCreator)
+            .Include(e => e.Comments)
+            .ThenInclude(c => c.User)
+            .Include(e => e.Likes)
+            .ThenInclude(l => l.User);
     }
 
     public PostProjectionSpec(Guid id) : base(id)
     {
+        Query
+            .Include(e => e.UserCreator)
+            .Include(e => e.Comments)
+            .ThenInclude(c => c.User)
+            .Include(e => e.Likes)
+            .ThenInclude(l => l.User);
     }
 
     public PostProjectionSpec(string? search)
     {
-        search = !string.IsNullOrWhiteSpace(search) ? search.Trim() : null;
+        Query
+            .Include(e => e.UserCreator)
+            .Include(e => e.Comments)
+            .ThenInclude(c => c.User)
+            .Include(e => e.Likes)
+            .ThenInclude(l => l.User);
 
+        search = !string.IsNullOrWhiteSpace(search) ? search.Trim() : null;
         if (search == null)
         {
             return;
@@ -41,7 +84,6 @@ public sealed class PostProjectionSpec : BaseSpec<PostProjectionSpec, Post, Post
 
         var searchExpr = $"%{search.Replace(" ", "%")}%";
 
-        Query.Where(e => EF.Functions.ILike(e.Content, searchExpr)); // This is an example on who database specific expressions can be used via C# expressions.
-                                                                                           // Note that this will be translated to the database something like "where Post.Name ilike '%str%'".
+        Query.Where(e => EF.Functions.ILike(e.Content, searchExpr));
     }
 }

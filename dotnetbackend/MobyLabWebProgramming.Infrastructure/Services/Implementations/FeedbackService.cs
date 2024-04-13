@@ -1,5 +1,4 @@
 using System.Net;
-using MobyLabWebProgramming.Core.Constants;
 using MobyLabWebProgramming.Core.DataTransferObjects;
 using MobyLabWebProgramming.Core.Entities;
 using MobyLabWebProgramming.Core.Enums;
@@ -72,9 +71,6 @@ public class FeedbackService : IFeedbackService
             UserId = feedback.UserCreatorId,
             Content = feedback.Content,
             Rating = feedback.Rating,
-            Email = feedback.Email,
-            Name = feedback.Name,
-            PhoneNumber = feedback.PhoneNumber,
             TypeOfAppreciation = feedback.TypeOfAppreciation,
             IsUserExperienceEnjoyable = feedback.IsUserExperienceEnjoyable
         }
@@ -97,9 +93,6 @@ public class FeedbackService : IFeedbackService
 
             entity.Content = feedback.Content ?? entity.Content; // Update the entity properties.
             entity.Rating = feedback.Rating;
-            entity.Email = feedback.Email ?? entity.Email;
-            entity.Name = feedback.Name ?? entity.Name;
-            entity.PhoneNumber = feedback.PhoneNumber ?? entity.PhoneNumber;
             entity.TypeOfAppreciation = feedback.TypeOfAppreciation ?? entity.TypeOfAppreciation;
             entity.IsUserExperienceEnjoyable = feedback.IsUserExperienceEnjoyable ?? entity.IsUserExperienceEnjoyable;  
 

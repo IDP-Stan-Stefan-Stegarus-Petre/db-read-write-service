@@ -6,35 +6,85 @@ using MobyLabWebProgramming.Core.Entities;
 
 namespace MobyLabWebProgramming.Core.Specifications;
 
-/// <summary>
-/// This is a specification to filter the user entities and map it to and UserDTO object via the constructors.
-/// Note how the constructors call the base class's constructors. Also, this is a sealed class, meaning it cannot be further derived.
-/// </summary>
 public sealed class UserProjectionSpec : BaseSpec<UserProjectionSpec, User, UserDTO>
 {
-    /// <summary>
-    /// This is the projection/mapping expression to be used by the base class to get UserDTO object from the database.
-    /// </summary>
     protected override Expression<Func<User, UserDTO>> Spec => e => new()
     {
         Id = e.Id,
-        Email = e.Email,
         Name = e.Name,
-        Role = e.Role
+        Email = e.Email,
+        PhoneNumber = e.PhoneNumber,
+        Role = e.Role,
+        Posts = e.Posts.Select(p => new PostDTO
+        {
+            Id = p.Id,
+            Content = p.Content
+        }).ToList(),
+        Likes = e.Likes.Select(l => new LikeDTO
+        {
+            Id = l.Id,
+            Post = new PostDTO
+            {
+                Id = l.Post.Id,
+                Content = l.Post.Content
+            }
+        }).ToList(),
+        Comments = e.Comments.Select(c => new CommentDTO
+        {
+            Id = c.Id,
+            Content = c.Content,
+            Post = new PostDTO
+            {
+                Id = c.Post.Id,
+                Content = c.Post.Content
+            }
+        }).ToList(),
+        Events = e.Events.Select(ev => new EventDTO
+        {
+            Id = ev.Id,
+            Content = ev.Content,
+            Title = ev.Title,
+            Location = ev.Location,
+            Date = ev.Date
+        }).ToList(),
     };
 
     public UserProjectionSpec(bool orderByCreatedAt = true) : base(orderByCreatedAt)
     {
+        Query
+            .Include(e => e.Posts)
+            .Include(e => e.Likes)
+            .ThenInclude(e => e.Post)
+            .Include(e => e.Comments)
+            .ThenInclude(e => e.Post)
+            .Include(e => e.Events)
+            .Include(e => e.UserFiles);
     }
 
     public UserProjectionSpec(Guid id) : base(id)
     {
+        Query
+            .Include(e => e.Posts)
+            .Include(e => e.Likes)
+            .ThenInclude(e => e.Post)
+            .Include(e => e.Comments)
+            .ThenInclude(e => e.Post)
+            .Include(e => e.Events)
+            .Include(e => e.UserFiles);
     }
 
     public UserProjectionSpec(string? search)
     {
-        search = !string.IsNullOrWhiteSpace(search) ? search.Trim() : null;
+        Query
+            .Include(e => e.Posts)
+            .Include(e => e.Likes)
+            .ThenInclude(e => e.Post)
+            .Include(e => e.Comments)
+            .ThenInclude(e => e.Post)
+            .Include(e => e.Events)
+            .Include(e => e.UserFiles);
 
+        search = !string.IsNullOrWhiteSpace(search) ? search.Trim() : null;
         if (search == null)
         {
             return;
@@ -42,7 +92,6 @@ public sealed class UserProjectionSpec : BaseSpec<UserProjectionSpec, User, User
 
         var searchExpr = $"%{search.Replace(" ", "%")}%";
 
-        Query.Where(e => EF.Functions.ILike(e.Name, searchExpr)); // This is an example on who database specific expressions can be used via C# expressions.
-                                                                                           // Note that this will be translated to the database something like "where user.Name ilike '%str%'".
+        Query.Where(e => EF.Functions.ILike(e.Name, searchExpr));
     }
 }
