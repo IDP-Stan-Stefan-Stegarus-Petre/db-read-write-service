@@ -29,7 +29,7 @@ public class FeedbackConfiguration : IEntityTypeConfiguration<FeedBack>
             .IsRequired();
 
         builder.HasOne(e => e.User)
-            .WithMany()
+            .WithMany(e => e.Feedbacks)
             .HasForeignKey(e => e.UserId)
             .HasPrincipalKey(e => e.Id)
             .IsRequired()

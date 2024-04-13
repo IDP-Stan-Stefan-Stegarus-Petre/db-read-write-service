@@ -9,7 +9,7 @@ namespace MobyLabWebProgramming.Core.DataTransferObjects;
 /// </summary>
 public class EventAddDTO
 {
-    public Guid UserCreatorId { get; set; } = default!;
+    public Guid UserId { get; set; } = default!;
 
     public string Content { get; set; } = default!;
 

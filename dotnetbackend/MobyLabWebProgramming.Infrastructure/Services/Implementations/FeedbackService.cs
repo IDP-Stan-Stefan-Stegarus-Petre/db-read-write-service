@@ -51,9 +51,9 @@ public class FeedbackService : IFeedbackService
     public async Task<ServiceResponse> AddFeedback(FeedbackAddDTO feedback, CancellationToken cancellationToken = default)
     {
         // we allow user to add a post in each and every case
-        User? userCreator = await _repository.GetAsync<User>(feedback.UserCreatorId!, cancellationToken); // Get the user that is creating the Post.
+        User? User = await _repository.GetAsync<User>(feedback.UserId!, cancellationToken); // Get the user that is creating the Post.
 
-        if (userCreator == null)
+        if (User == null)
         {
             return ServiceResponse.FromError(CommonErrors.UserNotFound); // Return an error if the User is not found.
         }
@@ -68,7 +68,7 @@ public class FeedbackService : IFeedbackService
 
         await _repository.AddAsync(new FeedBack 
         {
-            UserId = feedback.UserCreatorId,
+            UserId = feedback.UserId,
             Content = feedback.Content,
             Rating = feedback.Rating,
             TypeOfAppreciation = feedback.TypeOfAppreciation,
@@ -86,7 +86,7 @@ public class FeedbackService : IFeedbackService
         if (entity != null) // Verify if the Post is not found, you cannot update an non-existing entity.
         {
             // check if the user is the creator of the post
-            if (feedback.UserCreatorId != entity.UserId)
+            if (feedback.UserId != entity.UserId)
             {
                 return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Only the user that created the Feedback can update it!", ErrorCodes.CannotUpdate));
             }
@@ -102,7 +102,7 @@ public class FeedbackService : IFeedbackService
         return ServiceResponse.ForSuccess();
     }
 
-    public async Task<ServiceResponse> DeleteFeedback(Guid id, Guid idUserCreator, CancellationToken cancellationToken = default)
+    public async Task<ServiceResponse> DeleteFeedback(Guid id, Guid idUser, CancellationToken cancellationToken = default)
     {
         // only the user that created the post can delete it
         var feedback = await _repository.GetAsync<FeedBack>(id, cancellationToken); // Get the entity.
@@ -112,7 +112,7 @@ public class FeedbackService : IFeedbackService
             return ServiceResponse.FromError(CommonErrors.FeedbackNotFound); // Return an error if the Post is not found.
         }
 
-        if (idUserCreator != feedback.UserId)
+        if (idUser != feedback.UserId)
         {
             return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Only the user that created the Feedback can delete it!", ErrorCodes.CannotDelete));
         }

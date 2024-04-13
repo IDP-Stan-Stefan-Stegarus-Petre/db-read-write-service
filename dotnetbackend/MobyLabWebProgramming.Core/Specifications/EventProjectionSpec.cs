@@ -17,22 +17,22 @@ public sealed class EventProjectionSpec : BaseSpec<EventProjectionSpec, Event, E
         Date = e.Date,
         User = new UserDTO
         {
-            Id = e.UserCreator.Id,
-            Name = e.UserCreator.Name,
-            Email = e.UserCreator.Email,
-            PhoneNumber = e.UserCreator.PhoneNumber,
-            Role = e.UserCreator.Role
+            Id = e.User.Id,
+            Name = e.User.Name,
+            Email = e.User.Email,
+            PhoneNumber = e.User.PhoneNumber,
+            Role = e.User.Role
         }
     };
 
     public EventProjectionSpec(Guid id) : base(id)
     {
-        Query.Include(e => e.UserCreator);
+        Query.Include(e => e.User);
     }
 
     public EventProjectionSpec(string? search)
     {
-        Query.Include(e => e.UserCreator);
+        Query.Include(e => e.User);
 
         search = !string.IsNullOrWhiteSpace(search) ? search.Trim() : null;
         if (search == null)

@@ -7,6 +7,6 @@ public class Event : BaseEntity
     public string Location { get; set; } = default!;
     public string Date { get; set; } = default!;
 
-    public Guid UserCreatorId { get; set; }
-    public User UserCreator { get; set; } = default!;
+    public Guid UserId { get; set; }
+    public User User { get; set; } = default!;
 }

@@ -36,5 +36,5 @@ public interface IEventService
     /// DeleteEvent deletes an Event and verifies if requesting Event has permissions to delete it, if the Event is his own then that should be allowed.
     /// If the requesting Event is null then no verification is performed as it indicates that the application.
     /// </summary>
-    public Task<ServiceResponse> DeleteEvent(Guid id, Guid idUserCreator, CancellationToken cancellationToken = default);
+    public Task<ServiceResponse> DeleteEvent(Guid id, Guid idUser, CancellationToken cancellationToken = default);
 }

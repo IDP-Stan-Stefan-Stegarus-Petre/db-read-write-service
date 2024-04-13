@@ -45,15 +45,15 @@ public class EventService : IEventService
     public async Task<ServiceResponse> AddEvent(EventAddDTO eveniment, CancellationToken cancellationToken = default)
     {
         // we allow user to add a post in each and every case
-        User? userCreator = await _repository.GetAsync<User>(eveniment.UserCreatorId!, cancellationToken); // Get the user that is creating the Post.
+        User? User = await _repository.GetAsync<User>(eveniment.UserId!, cancellationToken); // Get the user that is creating the Post.
 
-        if (userCreator == null)
+        if (User == null)
         {
             return ServiceResponse.FromError(CommonErrors.UserNotFound); // Return an error if the User is not found.
         }
         await _repository.AddAsync(new Event
         {
-            UserCreatorId = eveniment.UserCreatorId,
+            UserId = eveniment.UserId,
             Content = eveniment.Content,
             Title = eveniment.Title,
             Location = eveniment.Location,
@@ -70,7 +70,7 @@ public class EventService : IEventService
         if (entity != null) // Verify if the Post is not found, you cannot update an non-existing entity.
         {
             // check if the user is the creator of the post
-            if (eveniment.UserCreatorId != entity.UserCreatorId)
+            if (eveniment.UserId != entity.UserId)
             {
                 return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Only the user that created the event can update it!", ErrorCodes.CannotUpdate));
             }
@@ -86,7 +86,7 @@ public class EventService : IEventService
         return ServiceResponse.ForSuccess();
     }
 
-    public async Task<ServiceResponse> DeleteEvent(Guid id, Guid idUserCreator, CancellationToken cancellationToken = default)
+    public async Task<ServiceResponse> DeleteEvent(Guid id, Guid idUser, CancellationToken cancellationToken = default)
     {
         // only the user that created the post can delete it
         var eveniment = await _repository.GetAsync<Event>(id, cancellationToken); // Get the entity.
@@ -96,7 +96,7 @@ public class EventService : IEventService
             return ServiceResponse.FromError(CommonErrors.EventNotFound); // Return an error if the Post is not found.
         }
 
-        if (idUserCreator != eveniment.UserCreatorId)
+        if (idUser != eveniment.UserId)
         {
             return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Only the user that created the event can delete it!", ErrorCodes.CannotDelete));
         }

@@ -13,4 +13,5 @@ public class UserDTO
     public ICollection<LikeDTO> Likes { get; set; } = new List<LikeDTO>();
     public ICollection<CommentDTO> Comments { get; set; } = new List<CommentDTO>();
     public ICollection<EventDTO> Events { get; set; } = new List<EventDTO>();
+    public ICollection<FeedbackDTO> Feedbacks { get; set; } = new List<FeedbackDTO>();
 }

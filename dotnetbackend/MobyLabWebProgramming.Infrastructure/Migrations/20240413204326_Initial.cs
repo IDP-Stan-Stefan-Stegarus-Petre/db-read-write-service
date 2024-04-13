@@ -36,10 +36,11 @@ namespace MobyLabWebProgramming.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Content = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    Content = table.Column<string>(type: "character varying(2047)", maxLength: 2047, nullable: false),
                     Title = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     Location = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     Date = table.Column<string>(type: "text", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
@@ -47,8 +48,8 @@ namespace MobyLabWebProgramming.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Event", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Event_User_Id",
-                        column: x => x.Id,
+                        name: "FK_Event_User_UserId",
+                        column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -61,11 +62,9 @@ namespace MobyLabWebProgramming.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Content = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     Rating = table.Column<int>(type: "integer", nullable: false),
-                    Email = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    Name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    PhoneNumber = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     TypeOfAppreciation = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     IsUserExperienceEnjoyable = table.Column<bool>(type: "boolean", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
@@ -73,8 +72,8 @@ namespace MobyLabWebProgramming.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_FeedBack", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_FeedBack_User_Id",
-                        column: x => x.Id,
+                        name: "FK_FeedBack_User_UserId",
+                        column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -85,7 +84,8 @@ namespace MobyLabWebProgramming.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Content = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    Content = table.Column<string>(type: "character varying(2047)", maxLength: 2047, nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
@@ -93,8 +93,8 @@ namespace MobyLabWebProgramming.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Post", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Post_User_Id",
-                        column: x => x.Id,
+                        name: "FK_Post_User_UserId",
+                        column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -128,7 +128,10 @@ namespace MobyLabWebProgramming.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Content = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    Content = table.Column<string>(type: "character varying(2047)", maxLength: 2047, nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PostId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId1 = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
@@ -136,17 +139,22 @@ namespace MobyLabWebProgramming.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Comment", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Comment_Post_Id",
-                        column: x => x.Id,
+                        name: "FK_Comment_Post_PostId",
+                        column: x => x.PostId,
                         principalTable: "Post",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Comment_User_Id",
-                        column: x => x.Id,
+                        name: "FK_Comment_User_UserId",
+                        column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Comment_User_UserId1",
+                        column: x => x.UserId1,
+                        principalTable: "User",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -154,6 +162,8 @@ namespace MobyLabWebProgramming.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    PostId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
@@ -161,18 +171,58 @@ namespace MobyLabWebProgramming.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Like", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Like_Post_Id",
-                        column: x => x.Id,
+                        name: "FK_Like_Post_PostId",
+                        column: x => x.PostId,
                         principalTable: "Post",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Like_User_Id",
-                        column: x => x.Id,
+                        name: "FK_Like_User_UserId",
+                        column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comment_PostId",
+                table: "Comment",
+                column: "PostId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comment_UserId",
+                table: "Comment",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comment_UserId1",
+                table: "Comment",
+                column: "UserId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Event_UserId",
+                table: "Event",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FeedBack_UserId",
+                table: "FeedBack",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Like_PostId",
+                table: "Like",
+                column: "PostId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Like_UserId",
+                table: "Like",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Post_UserId",
+                table: "Post",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserFile_UserId",

@@ -14,11 +14,11 @@ public sealed class PostProjectionSpec : BaseSpec<PostProjectionSpec, Post, Post
         Content = e.Content,
         User = new UserDTO
         {
-            Id = e.UserCreator.Id,
-            Name = e.UserCreator.Name,
-            Email = e.UserCreator.Email,
-            PhoneNumber = e.UserCreator.PhoneNumber,
-            Role = e.UserCreator.Role
+            Id = e.User.Id,
+            Name = e.User.Name,
+            Email = e.User.Email,
+            PhoneNumber = e.User.PhoneNumber,
+            Role = e.User.Role
         },
         Comments = e.Comments.Select(c => new CommentDTO
         {
@@ -50,7 +50,7 @@ public sealed class PostProjectionSpec : BaseSpec<PostProjectionSpec, Post, Post
     public PostProjectionSpec(bool orderByCreatedAt = true) : base(orderByCreatedAt)
     {
         Query
-            .Include(e => e.UserCreator)
+            .Include(e => e.User)
             .Include(e => e.Comments)
             .ThenInclude(c => c.User)
             .Include(e => e.Likes)
@@ -60,7 +60,7 @@ public sealed class PostProjectionSpec : BaseSpec<PostProjectionSpec, Post, Post
     public PostProjectionSpec(Guid id) : base(id)
     {
         Query
-            .Include(e => e.UserCreator)
+            .Include(e => e.User)
             .Include(e => e.Comments)
             .ThenInclude(c => c.User)
             .Include(e => e.Likes)
@@ -70,7 +70,7 @@ public sealed class PostProjectionSpec : BaseSpec<PostProjectionSpec, Post, Post
     public PostProjectionSpec(string? search)
     {
         Query
-            .Include(e => e.UserCreator)
+            .Include(e => e.User)
             .Include(e => e.Comments)
             .ThenInclude(c => c.User)
             .Include(e => e.Likes)

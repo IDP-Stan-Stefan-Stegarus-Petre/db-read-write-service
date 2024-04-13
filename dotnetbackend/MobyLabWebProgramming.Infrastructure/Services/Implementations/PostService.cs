@@ -48,15 +48,15 @@ public class PostService : IPostService
     public async Task<ServiceResponse> AddPost(PostAddDTO Post,  CancellationToken cancellationToken = default)
     {
         // we allow user to add a post in each and every case
-        User? userCreator = await _repository.GetAsync<User>(Post.UserCreatorId!, cancellationToken); // Get the user that is creating the Post.
+        User? User = await _repository.GetAsync<User>(Post.UserId!, cancellationToken); // Get the user that is creating the Post.
 
-        if (userCreator == null)
+        if (User == null)
         {
             return ServiceResponse.FromError(CommonErrors.UserNotFound); // Return an error if the User is not found.
         }
         await _repository.AddAsync(new Post
         {
-            UserCreator = userCreator,
+            User = User,
             Content = Post?.Content!,
         }, cancellationToken); // A new entity is created and persisted in the database.
 
@@ -72,7 +72,7 @@ public class PostService : IPostService
         {
 
             // check if the user is the creator of the post
-            if (Post.UserCreatorId != entity.UserCreatorId)
+            if (Post.UserId != entity.UserId)
             {
                 return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Only the user that created the post can update it!", ErrorCodes.CannotUpdate));
             }
@@ -85,7 +85,7 @@ public class PostService : IPostService
         return ServiceResponse.ForSuccess();
     }
 
-    public async Task<ServiceResponse> DeletePost(Guid id, Guid idUserCreator, CancellationToken cancellationToken = default)
+    public async Task<ServiceResponse> DeletePost(Guid id, Guid idUser, CancellationToken cancellationToken = default)
     {
         // only the user that created the post can delete it
         var post = await _repository.GetAsync<Post>(id, cancellationToken); // Get the entity.
@@ -95,7 +95,7 @@ public class PostService : IPostService
             return ServiceResponse.FromError(CommonErrors.PostNotFound); // Return an error if the Post is not found.
         }
 
-        if (idUserCreator != post.UserCreatorId)
+        if (idUser != post.UserId)
         {
             return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Only the user that created the post can delete it!", ErrorCodes.CannotDelete));
         }

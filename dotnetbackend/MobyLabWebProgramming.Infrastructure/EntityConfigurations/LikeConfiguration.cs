@@ -18,14 +18,14 @@ public class LikeConfiguration : IEntityTypeConfiguration<Like>
             .IsRequired();
 
         builder.HasOne(e => e.User)
-            .WithMany()
+            .WithMany(e => e.Likes)
             .HasForeignKey(e => e.UserId)
             .HasPrincipalKey(e => e.Id)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(e => e.Post)
-            .WithMany()
+            .WithMany(e => e.Likes)
             .HasForeignKey(e => e.PostId)
             .HasPrincipalKey(e => e.Id)
             .IsRequired()

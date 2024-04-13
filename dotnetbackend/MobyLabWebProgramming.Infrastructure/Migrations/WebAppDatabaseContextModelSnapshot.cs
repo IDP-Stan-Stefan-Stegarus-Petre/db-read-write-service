@@ -31,8 +31,8 @@ namespace MobyLabWebProgramming.Infrastructure.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
+                        .HasMaxLength(2047)
+                        .HasColumnType("character varying(2047)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp without time zone");
@@ -46,11 +46,16 @@ namespace MobyLabWebProgramming.Infrastructure.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("UserId1")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
                     b.HasIndex("PostId");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("Comment");
                 });
@@ -63,8 +68,8 @@ namespace MobyLabWebProgramming.Infrastructure.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
+                        .HasMaxLength(2047)
+                        .HasColumnType("character varying(2047)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp without time zone");
@@ -86,12 +91,12 @@ namespace MobyLabWebProgramming.Infrastructure.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UserCreatorId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserCreatorId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Event");
                 });
@@ -110,23 +115,8 @@ namespace MobyLabWebProgramming.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
                     b.Property<bool>("IsUserExperienceEnjoyable")
                         .HasColumnType("boolean");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
 
                     b.Property<int>("Rating")
                         .HasColumnType("integer");
@@ -144,8 +134,7 @@ namespace MobyLabWebProgramming.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("FeedBack");
                 });
@@ -185,8 +174,8 @@ namespace MobyLabWebProgramming.Infrastructure.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
+                        .HasMaxLength(2047)
+                        .HasColumnType("character varying(2047)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp without time zone");
@@ -194,12 +183,12 @@ namespace MobyLabWebProgramming.Infrastructure.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UserCreatorId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserCreatorId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Post");
                 });
@@ -287,7 +276,7 @@ namespace MobyLabWebProgramming.Infrastructure.Migrations
             modelBuilder.Entity("MobyLabWebProgramming.Core.Entities.Comment", b =>
                 {
                     b.HasOne("MobyLabWebProgramming.Core.Entities.Post", "Post")
-                        .WithMany()
+                        .WithMany("Comments")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -298,6 +287,10 @@ namespace MobyLabWebProgramming.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("MobyLabWebProgramming.Core.Entities.User", null)
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId1");
+
                     b.Navigation("Post");
 
                     b.Navigation("User");
@@ -306,8 +299,8 @@ namespace MobyLabWebProgramming.Infrastructure.Migrations
             modelBuilder.Entity("MobyLabWebProgramming.Core.Entities.Event", b =>
                 {
                     b.HasOne("MobyLabWebProgramming.Core.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserCreatorId")
+                        .WithMany("Events")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -317,8 +310,8 @@ namespace MobyLabWebProgramming.Infrastructure.Migrations
             modelBuilder.Entity("MobyLabWebProgramming.Core.Entities.FeedBack", b =>
                 {
                     b.HasOne("MobyLabWebProgramming.Core.Entities.User", "User")
-                        .WithOne()
-                        .HasForeignKey("MobyLabWebProgramming.Core.Entities.FeedBack", "UserId")
+                        .WithMany("Feedbacks")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -328,13 +321,13 @@ namespace MobyLabWebProgramming.Infrastructure.Migrations
             modelBuilder.Entity("MobyLabWebProgramming.Core.Entities.Like", b =>
                 {
                     b.HasOne("MobyLabWebProgramming.Core.Entities.Post", "Post")
-                        .WithMany()
+                        .WithMany("Likes")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MobyLabWebProgramming.Core.Entities.User", "User")
-                        .WithMany()
+                        .WithMany("Likes")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -346,13 +339,13 @@ namespace MobyLabWebProgramming.Infrastructure.Migrations
 
             modelBuilder.Entity("MobyLabWebProgramming.Core.Entities.Post", b =>
                 {
-                    b.HasOne("MobyLabWebProgramming.Core.Entities.User", "UserCreator")
-                        .WithMany()
-                        .HasForeignKey("UserCreatorId")
+                    b.HasOne("MobyLabWebProgramming.Core.Entities.User", "User")
+                        .WithMany("Posts")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("UserCreator");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MobyLabWebProgramming.Core.Entities.UserFile", b =>
@@ -366,8 +359,25 @@ namespace MobyLabWebProgramming.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("MobyLabWebProgramming.Core.Entities.Post", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Likes");
+                });
+
             modelBuilder.Entity("MobyLabWebProgramming.Core.Entities.User", b =>
                 {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Events");
+
+                    b.Navigation("Feedbacks");
+
+                    b.Navigation("Likes");
+
+                    b.Navigation("Posts");
+
                     b.Navigation("UserFiles");
                 });
 #pragma warning restore 612, 618

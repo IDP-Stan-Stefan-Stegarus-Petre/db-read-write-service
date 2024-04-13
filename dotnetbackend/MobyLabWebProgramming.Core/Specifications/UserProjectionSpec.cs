@@ -47,6 +47,14 @@ public sealed class UserProjectionSpec : BaseSpec<UserProjectionSpec, User, User
             Location = ev.Location,
             Date = ev.Date
         }).ToList(),
+        Feedbacks = e.Feedbacks.Select(f => new FeedbackDTO
+        {
+            Id = f.Id,
+            Content = f.Content,
+            Rating = f.Rating,
+            TypeOfAppreciation = f.TypeOfAppreciation,
+            IsUserExperienceEnjoyable = f.IsUserExperienceEnjoyable,
+        }).ToList(),
     };
 
     public UserProjectionSpec(bool orderByCreatedAt = true) : base(orderByCreatedAt)
@@ -58,6 +66,7 @@ public sealed class UserProjectionSpec : BaseSpec<UserProjectionSpec, User, User
             .Include(e => e.Comments)
             .ThenInclude(e => e.Post)
             .Include(e => e.Events)
+            .Include(e => e.Feedbacks)
             .Include(e => e.UserFiles);
     }
 
@@ -70,6 +79,7 @@ public sealed class UserProjectionSpec : BaseSpec<UserProjectionSpec, User, User
             .Include(e => e.Comments)
             .ThenInclude(e => e.Post)
             .Include(e => e.Events)
+            .Include(e => e.Feedbacks)
             .Include(e => e.UserFiles);
     }
 
@@ -82,6 +92,7 @@ public sealed class UserProjectionSpec : BaseSpec<UserProjectionSpec, User, User
             .Include(e => e.Comments)
             .ThenInclude(e => e.Post)
             .Include(e => e.Events)
+            .Include(e => e.Feedbacks)
             .Include(e => e.UserFiles);
 
         search = !string.IsNullOrWhiteSpace(search) ? search.Trim() : null;

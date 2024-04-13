@@ -36,5 +36,5 @@ public interface IPostService
     /// DeletePost deletes an Post and verifies if requesting Post has permissions to delete it, if the Post is his own then that should be allowed.
     /// If the requesting Post is null then no verification is performed as it indicates that the application.
     /// </summary>
-    public Task<ServiceResponse> DeletePost(Guid id, Guid idUserCreator, CancellationToken cancellationToken = default);
+    public Task<ServiceResponse> DeletePost(Guid id, Guid idUser, CancellationToken cancellationToken = default);
 }

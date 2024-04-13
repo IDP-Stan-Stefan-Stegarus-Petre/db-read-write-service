@@ -29,9 +29,9 @@ public class EventConfiguration : IEntityTypeConfiguration<Event>
         builder.Property(e => e.UpdatedAt)
             .IsRequired();
 
-        builder.HasOne(e => e.UserCreator)
-            .WithMany()
-            .HasForeignKey(e => e.UserCreatorId)
+        builder.HasOne(e => e.User)
+            .WithMany(e => e.Events)
+            .HasForeignKey(e => e.UserId)
             .HasPrincipalKey(e => e.Id)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);

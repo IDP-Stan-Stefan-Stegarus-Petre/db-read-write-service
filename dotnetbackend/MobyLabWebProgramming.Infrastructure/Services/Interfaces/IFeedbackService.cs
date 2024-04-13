@@ -36,5 +36,5 @@ public interface IFeedbackService
     /// DeleteFeedback deletes an Feedback and verifies if requesting Feedback has permissions to delete it, if the Feedback is his own then that should be allowed.
     /// If the requesting Feedback is null then no verification is performed as it indicates that the application.
     /// </summary>
-    public Task<ServiceResponse> DeleteFeedback(Guid id, Guid idUserCreator, CancellationToken cancellationToken = default);
+    public Task<ServiceResponse> DeleteFeedback(Guid id, Guid idUser, CancellationToken cancellationToken = default);
 }

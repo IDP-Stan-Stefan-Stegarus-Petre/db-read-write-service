@@ -15,4 +15,5 @@ public class User : BaseEntity
     public ICollection<Comment> Comments { get; set; } = default!;
     public ICollection<Event> Events { get; set; } = default!;
     public ICollection<UserFile> UserFiles { get; set; } = default!;
+    public ICollection<FeedBack> Feedbacks { get; set; } = default!;
 }

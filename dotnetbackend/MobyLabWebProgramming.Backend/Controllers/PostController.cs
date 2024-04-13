@@ -92,9 +92,9 @@ public class PostController: ControllerBase // Here we use the AuthorizedControl
     /// Note that in the HTTP RFC you cannot have a body for DELETE operations.
     /// </summary>
     //[Authorize]
-    [HttpDelete("{id}/{idUserCreator}")] // This attribute will make the controller respond to a HTTP DELETE request on the route /api/User/Delete/<some_guid>.
-    public async Task<ActionResult<RequestResponse>> Delete([FromRoute] Guid id, [FromRoute] Guid idUserCreator) // The FromRoute attribute will bind the id from the route to this parameter.
+    [HttpDelete("{id}/{idUser}")] // This attribute will make the controller respond to a HTTP DELETE request on the route /api/User/Delete/<some_guid>.
+    public async Task<ActionResult<RequestResponse>> Delete([FromRoute] Guid id, [FromRoute] Guid idUser) // The FromRoute attribute will bind the id from the route to this parameter.
     {
-        return this.FromServiceResponse(await postService.DeletePost(id, idUserCreator));
+        return this.FromServiceResponse(await postService.DeletePost(id, idUser));
     }
 }
