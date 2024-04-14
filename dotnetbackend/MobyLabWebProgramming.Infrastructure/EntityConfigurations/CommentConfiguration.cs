@@ -22,7 +22,7 @@ public class CommentConfiguration : IEntityTypeConfiguration<Comment>
             .IsRequired();
 
         builder.HasOne(e => e.User)
-            .WithMany()
+            .WithMany(e => e.Comments)
             .HasForeignKey(e => e.UserId)
             .HasPrincipalKey(e => e.Id)
             .IsRequired()

@@ -131,7 +131,6 @@ namespace MobyLabWebProgramming.Infrastructure.Migrations
                     Content = table.Column<string>(type: "character varying(2047)", maxLength: 2047, nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     PostId = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId1 = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
@@ -150,11 +149,6 @@ namespace MobyLabWebProgramming.Infrastructure.Migrations
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Comment_User_UserId1",
-                        column: x => x.UserId1,
-                        principalTable: "User",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -193,11 +187,6 @@ namespace MobyLabWebProgramming.Infrastructure.Migrations
                 name: "IX_Comment_UserId",
                 table: "Comment",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Comment_UserId1",
-                table: "Comment",
-                column: "UserId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Event_UserId",
