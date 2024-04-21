@@ -32,16 +32,9 @@ public static class WebApplicationBuilderExtensions
     {
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true); // This is used to avoid some errors with the timezone when working with timestamps.
 
-        var connectionString = builder.Configuration.GetConnectionString("WebAppDatabase");
-        var environment = builder.Configuration.GetSection("ASPNETCORE_ENVIRONMENT").Value;
-        if (environment == "Production")
-        {
-            connectionString = connectionString.Replace("localhost", "postgres");
-        }
-
         builder.Services.AddDbContext<WebAppDatabaseContext>(options =>
             options.UseNpgsql(
-                connectionString,
+                builder.Configuration.GetConnectionString("WebAppDatabase"),
                 o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery)
                     .CommandTimeout((int)TimeSpan.FromMinutes(15).TotalSeconds)));
         builder.Services.AddTransient<IRepository<WebAppDatabaseContext>, Repository<WebAppDatabaseContext>>();
